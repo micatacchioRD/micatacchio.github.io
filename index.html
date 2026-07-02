@@ -132,19 +132,11 @@
 
   /* --- Bio --- */
   .bio { margin-top: 2.6rem; }
-  .bio p { margin: 0 0 1.1rem; }
+  .bio p { margin: 0 0 1.1rem; text-align: justify; hyphens: auto; }
   .bio p:last-child { margin-bottom: 0; }
-  .bio a {
-    color: var(--ink);
-    text-decoration: none;
-    border-bottom: 1px solid var(--rule);
-    transition: border-color .15s, color .15s;
-  }
-  .bio a:hover,
-  .bio a:focus-visible { color: var(--accent); border-bottom-color: var(--accent); }
 
   /* --- Pubblicazioni --- */
-  .pubs { margin-top: 3.2rem; }
+  .pubs { margin-top: 3.2rem; counter-reset: pub; }
   .pubs h2 {
     font-family: var(--mono);
     font-size: .78rem;
@@ -154,7 +146,20 @@
     color: var(--ink-soft);
     margin: 0 0 1.5rem;
   }
-  .pub { margin: 0 0 1rem; }
+  .pub {
+    counter-increment: pub;
+    display: grid;
+    grid-template-columns: 2.25rem 1fr;
+    align-items: start;
+    margin: 0 0 1rem;
+  }
+  .pub::before {
+    content: counter(pub) ".";
+    font-family: var(--mono);
+    font-size: .8rem;
+    line-height: 1.65;
+    color: var(--ink-soft);
+  }
   .pub:last-child { margin-bottom: 0; }
   .pub a {
     font-weight: 600;
@@ -201,14 +206,13 @@
 
     <nav>
       <a href="mailto:michele.catacchio@uniba.it">Email</a>
-      <a href="https://github.com/miccatacchioRD" target="_blank" rel="me noopener">GitHub</a>
+      <a href="https://github.com/micatacchioRD" target="_blank" rel="me noopener">GitHub</a>
       <a href="https://www.linkedin.com/in/michele-catacchio-523357237" target="_blank" rel="me noopener">LinkedIn</a>
       <a href="https://orcid.org/0009-0000-0640-9673" target="_blank" rel="me noopener">ORCID</a>
       <a href="https://scholar.google.com/citations?user=hJAP66cAAAAJ&hl=it" target="_blank" rel="me noopener">Scholar</a>
     </nav>
   </header>
 
-  <!-- TODO: rivedi/riscrivi la bio. È una bozza basata sul tuo profilo. -->
   <section class="bio">
     <p>I am a PhD student in the Department of Pharmacy &ndash; Drug Sciences at the
     University of Bari Aldo Moro. I hold a Master's degree in Chemistry and am a
@@ -217,7 +221,7 @@
     where I had previously carried out a three-month research stay during my
     bachelor's.</p>
 
-    <p>My research focuses on developing high-performance biosensors based on
+    <p>My research focuses on developing ultrasensitive biosensors based on
     organic field-effect transistors (EGOFET) and surface plasmon resonance (SPR).</p>
 
     <p>I also hold a second-level Master (MBA) in Economics and Management of
