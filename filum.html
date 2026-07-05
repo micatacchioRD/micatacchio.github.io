@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Filum — le cure croniche in un unico filo</title>
+<meta name="description" content="Filum è l'ecosistema digitale che coordina le cure croniche: connette paziente, medico, laboratorio e farmacia in un flusso continuo con alert AI in tempo reale.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0c2b31;
+    --ink-2:#4d6167;
+    --paper:#ffffff;
+    --mist:#f1f9f7;
+    --mist-2:#e7f4f1;
+    --line:#dfeae7;
+    --teal:#10b3a3;
+    --teal-d:#0a8d80;
+    --teal-ink:#0b3b39;
+    --mint:#d6f3ec;
+    --alert:#f2a83b;
+    --display:"Space Grotesk",-apple-system,system-ui,sans-serif;
+    --body:"Inter",-apple-system,system-ui,sans-serif;
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;font-family:var(--body);color:var(--ink);background:var(--paper);
+    line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(1.1rem,4vw,2rem);}
+  h1,h2,h3{font-family:var(--display);font-weight:600;line-height:1.08;letter-spacing:-.02em;margin:0;}
+  .accent{color:var(--teal);}
+
+  /* buttons */
+  .btn{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--display);
+    font-weight:600;font-size:.95rem;padding:.72rem 1.3rem;border-radius:999px;
+    border:1px solid transparent;cursor:pointer;transition:.18s;white-space:nowrap;}
+  .btn-primary{background:var(--teal);color:#fff;}
+  .btn-primary:hover{background:var(--teal-d);transform:translateY(-1px);}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line);}
+  .btn-ghost:hover{border-color:var(--teal);color:var(--teal-d);}
+  .btn-sm{padding:.5rem 1rem;font-size:.9rem;}
+
+  /* ---------- NAV ---------- */
+  header.nav-shell{position:sticky;top:0;z-index:50;padding:.85rem 0;background:rgba(255,255,255,.82);backdrop-filter:blur(10px);}
+  .nav{display:flex;align-items:center;gap:1.5rem;
+    background:#fff;border:1px solid var(--line);border-radius:18px;
+    padding:.55rem .7rem .55rem 1.1rem;box-shadow:0 6px 24px -18px rgba(12,43,49,.5);}
+  .brand{display:flex;align-items:center;gap:.55rem;font-family:var(--display);font-weight:700;font-size:1.18rem;letter-spacing:-.02em;}
+  .brand svg{display:block;}
+  .nav-links{display:flex;gap:1.35rem;margin-left:.5rem;font-size:.95rem;color:var(--ink-2);}
+  .nav-links a:hover{color:var(--teal-d);}
+  .nav-links a.active{color:var(--teal);font-weight:500;}
+  .nav-right{margin-left:auto;display:flex;align-items:center;gap:.7rem;}
+  .lang{display:flex;align-items:center;gap:.25rem;font-size:.9rem;color:var(--ink-2);border:1px solid var(--line);border-radius:999px;padding:.35rem .6rem;}
+  .link-plain{font-size:.95rem;color:var(--ink-2);}
+  .link-plain:hover{color:var(--ink);}
+  .nav-toggle{display:none;}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:clamp(3rem,7vw,5.5rem) 0 clamp(2.5rem,5vw,4rem);}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(2rem,5vw,3.5rem);align-items:center;}
+  .eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--display);
+    font-size:.8rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase;
+    color:var(--teal-d);background:var(--mint);padding:.4rem .8rem;border-radius:999px;margin-bottom:1.3rem;}
+  .hero h1{font-size:clamp(2.3rem,5.2vw,3.6rem);}
+  .hero p.lead{font-size:clamp(1.05rem,1.6vw,1.22rem);color:var(--ink-2);max-width:33ch;margin:1.4rem 0 2rem;}
+  .hero-cta{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;}
+  .hero-note{margin-top:1.6rem;font-size:.86rem;color:var(--ink-2);display:flex;align-items:center;gap:.5rem;}
+  .hero-note svg{flex:none;}
+
+  /* signature: the thread / ecosystem card */
+  .thread-card{background:linear-gradient(180deg,#fff, var(--mist));border:1px solid var(--line);
+    border-radius:24px;padding:1.6rem 1.5rem;box-shadow:0 30px 60px -40px rgba(12,43,49,.45);position:relative;overflow:hidden;}
+  .thread-card h4{font-family:var(--display);font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2);font-weight:600;margin:0 0 1.1rem;}
+  .flow{position:relative;}
+  .flow-svg{position:absolute;left:23px;top:8px;height:calc(100% - 16px);width:40px;overflow:visible;pointer-events:none;}
+  .node{display:flex;align-items:center;gap:.9rem;padding:.7rem 0;position:relative;z-index:2;}
+  .node .dot{width:48px;height:48px;flex:none;border-radius:14px;display:grid;place-items:center;
+    background:#fff;border:1px solid var(--line);color:var(--teal-d);box-shadow:0 8px 18px -12px rgba(12,43,49,.4);}
+  .node .txt strong{display:block;font-family:var(--display);font-weight:600;font-size:1rem;}
+  .node .txt span{font-size:.85rem;color:var(--ink-2);}
+  .alert-chip{position:absolute;right:6px;top:calc(50% - 14px);z-index:3;display:flex;align-items:center;gap:.45rem;
+    background:#fff;border:1px solid #f6dcae;color:#b9791a;font-family:var(--display);font-weight:600;
+    font-size:.78rem;padding:.4rem .65rem;border-radius:999px;box-shadow:0 10px 22px -14px rgba(180,120,20,.6);}
+  .alert-chip .pip{width:8px;height:8px;border-radius:50%;background:var(--alert);animation:blink 1.4s infinite;}
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:.25;}}
+
+  /* ---------- STATS ---------- */
+  .stats{background:var(--teal-ink);color:#dff3ef;padding:clamp(2.4rem,5vw,3.4rem) 0;}
+  .stats .cap{font-family:var(--display);font-size:clamp(1.1rem,2vw,1.4rem);font-weight:500;color:#fff;max-width:22ch;margin:0 0 2rem;}
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem;}
+  .stat .n{font-family:var(--display);font-weight:700;font-size:clamp(1.9rem,3.4vw,2.6rem);color:#fff;line-height:1;letter-spacing:-.02em;}
+  .stat .l{font-size:.9rem;color:#a9d6cf;margin-top:.5rem;}
+  .stat{border-left:2px solid rgba(255,255,255,.16);padding-left:1rem;}
+
+  /* ---------- SECTION scaffolding ---------- */
+  section.block{padding:clamp(3rem,6vw,5rem) 0;}
+  .sec-head{max-width:56ch;margin-bottom:2.6rem;}
+  .sec-eyebrow{font-family:var(--display);font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);margin-bottom:.7rem;}
+  .sec-head h2{font-size:clamp(1.7rem,3.4vw,2.4rem);}
+  .sec-head p{color:var(--ink-2);font-size:1.05rem;margin-top:.9rem;}
+
+  /* problem strip */
+  .frag{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1.5rem;}
+  .frag .cell{background:var(--mist);border:1px solid var(--line);border-radius:14px;padding:1rem 1.1rem;text-align:center;}
+  .frag .cell span{font-family:var(--display);font-weight:600;font-size:.95rem;}
+  .frag .cell small{display:block;color:var(--ink-2);font-size:.8rem;margin-top:.2rem;}
+  .frag-note{margin-top:1.3rem;color:var(--ink-2);}
+
+  /* pillars */
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:1.6rem 1.5rem;transition:.2s;}
+  .card:hover{border-color:var(--teal);box-shadow:0 24px 44px -34px rgba(12,43,49,.5);transform:translateY(-3px);}
+  .card .ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:var(--mint);color:var(--teal-d);margin-bottom:1.1rem;}
+  .card h3{font-size:1.2rem;margin-bottom:.6rem;}
+  .card p{color:var(--ink-2);font-size:.96rem;margin:0;}
+  .card .tag{display:inline-block;margin-top:1rem;font-family:var(--display);font-size:.74rem;font-weight:600;letter-spacing:.03em;color:var(--teal-d);background:var(--mist-2);padding:.28rem .6rem;border-radius:999px;}
+
+  /* timeline */
+  .why{background:var(--mist);border-radius:24px;padding:clamp(1.8rem,4vw,3rem);}
+  .tl{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:1.8rem;}
+  .tl .step{position:relative;padding-top:1.6rem;}
+  .tl .step::before{content:"";position:absolute;top:6px;left:0;width:14px;height:14px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px var(--mint);}
+  .tl .step .yr{font-family:var(--display);font-weight:600;color:var(--teal-d);font-size:.85rem;letter-spacing:.03em;}
+  .tl .step h4{font-family:var(--display);font-size:1.05rem;margin:.25rem 0 .35rem;}
+  .tl .step p{color:var(--ink-2);font-size:.9rem;margin:0;}
+  .why .kick{color:var(--ink-2);margin-top:1.8rem;max-width:60ch;}
+  .why .kick b{color:var(--ink);font-weight:600;}
+
+  /* data band */
+  .data{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(2rem,5vw,3.5rem);align-items:center;}
+  .data blockquote{font-family:var(--display);font-weight:500;font-size:clamp(1.4rem,2.6vw,2rem);line-height:1.2;margin:0;letter-spacing:-.02em;}
+  .data blockquote span{color:var(--teal);}
+  .data p{color:var(--ink-2);}
+  .data .panel{background:var(--teal-ink);color:#dff3ef;border-radius:20px;padding:1.7rem;}
+  .data .panel .row{display:flex;gap:.7rem;align-items:flex-start;padding:.65rem 0;border-bottom:1px solid rgba(255,255,255,.12);font-size:.95rem;}
+  .data .panel .row:last-child{border-bottom:0;}
+  .data .panel .row svg{flex:none;margin-top:2px;color:var(--teal);}
+
+  /* final cta */
+  .final{text-align:center;background:linear-gradient(180deg,var(--mist),#fff);padding:clamp(3rem,6vw,5rem) 0;}
+  .final h2{font-size:clamp(1.8rem,3.6vw,2.6rem);max-width:20ch;margin:0 auto 1.2rem;}
+  .final p{color:var(--ink-2);max-width:46ch;margin:0 auto 1.8rem;}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:2.4rem 0;}
+  .foot{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;color:var(--ink-2);font-size:.88rem;}
+  .foot .brand{color:var(--ink);}
+
+  /* signup / profilo */
+  .signup{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,3.5rem);align-items:center;}
+  .perks{list-style:none;padding:0;margin:1.6rem 0 0;display:grid;gap:.65rem;}
+  .perks li{display:flex;align-items:center;gap:.6rem;font-size:.96rem;color:var(--ink);}
+  .perks li svg{flex:none;color:var(--teal-d);}
+  .form-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:1.7rem;box-shadow:0 30px 60px -40px rgba(12,43,49,.45);}
+  .field{margin-bottom:1rem;}
+  .field label{display:block;font-family:var(--display);font-size:.82rem;font-weight:600;color:var(--ink-2);margin-bottom:.4rem;}
+  .field input,.field select{width:100%;padding:.75rem .9rem;border:1px solid var(--line);border-radius:12px;font:inherit;font-size:.95rem;color:var(--ink);background:#fff;transition:.15s;}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px var(--mint);}
+  .consent{display:flex;gap:.55rem;align-items:flex-start;font-size:.84rem;color:var(--ink-2);margin:.3rem 0 1rem;line-height:1.4;}
+  .consent input{margin-top:.15rem;accent-color:var(--teal);}
+  .form-foot{text-align:center;font-size:.85rem;color:var(--ink-2);margin:1rem 0 0;}
+  .form-foot a{color:var(--teal-d);font-weight:600;}
+  @media(max-width:920px){.signup{grid-template-columns:1fr;}}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;}
+  .reveal.in{opacity:1;transform:none;}
+
+  /* ---------- responsive ---------- */
+  @media(max-width:920px){
+    .hero-grid,.data{grid-template-columns:1fr;}
+    .stat-row{grid-template-columns:repeat(2,1fr);gap:1.6rem 1.2rem;}
+    .pillars,.frag,.tl{grid-template-columns:1fr;}
+    .frag{grid-template-columns:repeat(2,1fr);}
+    .nav-links,.link-plain,.lang{display:none;}
+    .nav-toggle{display:inline-flex;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;}
+    .reveal{opacity:1;transform:none;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav-shell">
+  <div class="wrap">
+    <nav class="nav">
+      <span class="brand">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+          <path d="M4 20c4-2 4-12 9-14 4-1.6 8 1 8 5s-4 6.5-8 5-6.5-4-5-8" stroke="#10b3a3" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="4" cy="20" r="2.3" fill="#0c2b31"/>
+          <circle cx="21" cy="11" r="2.3" fill="#10b3a3"/>
+        </svg>
+        Filum
+      </span>
+      <div class="nav-links">
+        <a href="#" class="active">Home</a>
+        <a href="#piattaforma">Piattaforma</a>
+        <a href="#perche">Perché ora</a>
+        <a href="#aziende">Per aziende</a>
+      </div>
+      <div class="nav-right">
+        <span class="lang">IT
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5 5 6.5 8 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </span>
+        <a href="#" class="link-plain">Log in</a>
+        <a href="#aziende" class="btn btn-ghost btn-sm">Per aziende</a>
+        <a href="#profilo" class="btn btn-primary btn-sm">Crea profilo</a>
+        <button class="btn btn-ghost btn-sm nav-toggle" aria-label="Menu">Menu</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="reveal">
+      <span class="eyebrow">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#0a8d80" stroke-width="1.5"/><path d="M4.5 7 6.3 8.8 9.5 5" stroke="#0a8d80" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Ecosistema digitale di coordinamento delle cure
+      </span>
+      <h1>Le cure croniche,<br>finalmente in <span class="accent">un unico filo.</span></h1>
+      <p class="lead">Filum connette paziente, medico, laboratorio e farmacia in un flusso continuo — e genera alert in tempo reale quando il percorso di cura si interrompe.</p>
+      <div class="hero-cta">
+        <a href="#final" class="btn btn-primary">Scopri di più</a>
+        <a href="#come" class="btn btn-ghost">Come funziona
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="hero-note">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5 3 3.6v3.2c0 3 2.1 5.2 5 6.7 2.9-1.5 5-3.7 5-6.7V3.6L8 1.5Z" stroke="#0a8d80" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        Identità sanitaria del paziente, sovrana e verificabile — standard W3C.
+      </div>
+    </div>
+
+    <!-- SIGNATURE: il filo che connette gli attori -->
+    <div class="reveal">
+      <div class="thread-card">
+        <h4>Il percorso di cura, coordinato</h4>
+        <div class="flow">
+          <svg class="flow-svg" viewBox="0 0 40 300" preserveAspectRatio="none" aria-hidden="true">
+            <path id="thread" d="M20 8 C 6 60, 34 100, 20 150 S 6 240, 20 292" fill="none" stroke="#10b3a3" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="600" stroke-dashoffset="600">
+              <animate attributeName="stroke-dashoffset" from="600" to="0" dur="2s" fill="freeze"/>
+            </path>
+            <circle r="4" fill="#0c2b31">
+              <animateMotion dur="3.2s" repeatCount="indefinite" begin="1.4s"
+                path="M20 8 C 6 60, 34 100, 20 150 S 6 240, 20 292"/>
+            </circle>
+          </svg>
+
+          <div class="node">
+            <span class="dot">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="7.5" r="3.3" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 17c1-3 3.6-4.3 6.5-4.3S16.5 14 17.5 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </span>
+            <span class="txt"><strong>Paziente</strong><span>possiede e controlla i suoi dati</span></span>
+          </div>
+
+          <div class="node">
+            <span class="dot">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M6 4v3a5 5 0 0 0 10 0V4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M6 4h1M15 4h1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="11" cy="16.5" r="2.2" stroke="currentColor" stroke-width="1.6"/><path d="M11 12v2.3" stroke="currentColor" stroke-width="1.6"/></svg>
+            </span>
+            <span class="txt"><strong>Medico</strong><span>riceve il contesto prima della visita</span></span>
+          </div>
+
+          <div class="node">
+            <span class="dot">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M9 3v5.5L5 15a2.5 2.5 0 0 0 2.3 3.5h7.4A2.5 2.5 0 0 0 17 15l-4-6.5V3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 3h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </span>
+            <span class="txt"><strong>Laboratorio</strong><span>referti nel profilo longitudinale</span></span>
+            <span class="alert-chip"><span class="pip"></span>Alert AI · deriva terapeutica</span>
+          </div>
+
+          <div class="node">
+            <span class="dot">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="4" y="6" width="14" height="12" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M11 9.5v5M8.5 12h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M7 6V4.5h8V6" stroke="currentColor" stroke-width="1.6"/></svg>
+            </span>
+            <span class="txt"><strong>Farmacia</strong><span>prescrizione ed erogazione tracciate</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats reveal">
+  <div class="wrap">
+    <p class="cap">La non aderenza non è un problema di volontà. È un problema di sistema.</p>
+    <div class="stat-row">
+      <div class="stat"><div class="n">24 mln</div><div class="l">italiani con almeno una malattia cronica</div></div>
+      <div class="stat"><div class="n">&gt;50%</div><div class="l">pazienti con BPCO non aderenti alla terapia</div></div>
+      <div class="stat"><div class="n">43%</div><div class="l">pazienti con dislipidemia non aderenti</div></div>
+      <div class="stat"><div class="n">47,5%</div><div class="l">diabetici ancora in trattamento a 12 mesi</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEMA -->
+<section class="block" id="problema">
+  <div class="wrap reveal">
+    <div class="sec-head">
+      <div class="sec-eyebrow">Il problema</div>
+      <h2>Un percorso frammentato per struttura</h2>
+      <p>Medico di base, specialista, laboratorio e farmacia non comunicano tra loro. Ogni visita riparte da zero, e il paziente è l'unico — spesso impreparato — coordinatore del proprio percorso.</p>
+    </div>
+    <div class="frag">
+      <div class="cell"><span>Medico di base</span><small>isolato</small></div>
+      <div class="cell"><span>Specialista</span><small>senza contesto</small></div>
+      <div class="cell"><span>Laboratorio</span><small>referti dispersi</small></div>
+      <div class="cell"><span>Farmacia</span><small>fuori dal flusso</small></div>
+    </div>
+    <p class="frag-note">Nessuno avvisa il paziente quando sta deviando. Nessuno segnala al medico prima che arrivi la complicanza.</p>
+  </div>
+</section>
+
+<!-- PIATTAFORMA / PILASTRI -->
+<section class="block" id="piattaforma" style="background:var(--mist);">
+  <div class="wrap reveal">
+    <div class="sec-head">
+      <div class="sec-eyebrow">La piattaforma</div>
+      <h2>Un layer intelligente, non un'altra app</h2>
+      <p>Filum non è un'app né un dispositivo medico. È l'infrastruttura che tiene insieme il percorso di cura, su tre pilastri.</p>
+    </div>
+    <div class="pillars">
+      <div class="card">
+        <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v5c0 4 3 7 7 8 4-1 7-4 7-8V6l-7-3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Identità digitale sovrana</h3>
+        <p>Ogni paziente possiede e controlla la propria identità sanitaria tramite Verifiable Credentials standard W3C. Consenso granulare, revocabile, auditabile. Il dato non è in un database centralizzato: è del paziente.</p>
+        <span class="tag">SSI · Blockchain</span>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 18V6M4 15c3 0 3-6 8-6s5 6 8 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="4" cy="18" r="1.6" fill="currentColor"/></svg></div>
+        <h3>Profilo longitudinale continuo</h3>
+        <p>Referti, terapie, visite e parametri si accumulano in un'unica storia clinica verificabile. Lo specialista riceve il contesto prima della visita; l'AI rileva la deriva terapeutica prima della complicanza.</p>
+        <span class="tag">Storia clinica · AI</span>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 7h16l-1.3 8.4a2 2 0 0 1-2 1.6H7.3a2 2 0 0 1-2-1.6L4 7Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8 7V5.5A2.5 2.5 0 0 1 10.5 3h3A2.5 2.5 0 0 1 16 5.5V7" stroke="currentColor" stroke-width="1.7"/></svg></div>
+        <h3>Marketplace integrato</h3>
+        <p>Prenotazione analisi, referto digitale, prescrizione farmaceutica e teleconsulto — in un'unica interfaccia per il paziente e per il caregiver.</p>
+        <span class="tag">Servizi · Caregiver</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COME FUNZIONA / PERCHÉ ORA -->
+<section class="block" id="perche">
+  <div class="wrap reveal">
+    <div class="why" id="come">
+      <div class="sec-eyebrow">Perché ora</div>
+      <h2 style="font-size:clamp(1.6rem,3.2vw,2.2rem);max-width:24ch;">Il vantaggio non è solo tecnico: è temporale</h2>
+      <div class="tl">
+        <div class="step">
+          <div class="yr">2026–2027</div>
+          <h4>eIDAS 2</h4>
+          <p>Identità digitale europea: il wallet diventa il modo standard di provare chi sei, anche in sanità.</p>
+        </div>
+        <div class="step">
+          <div class="yr">2026–2027</div>
+          <h4>EHDS</h4>
+          <p>European Health Data Space: la condivisione strutturata dei dati sanitari diventa un imperativo regolatorio.</p>
+        </div>
+        <div class="step">
+          <div class="yr">2026–2027</div>
+          <h4>FSE 2.0</h4>
+          <p>Fascicolo Sanitario Elettronico rinnovato: converge verso il modello di identità sovrana.</p>
+        </div>
+      </div>
+      <p class="kick">Questi tre standard convergono verso il modello SSI. <b>Chi entra oggi costruisce il profilo longitudinale e la base utenti prima che diventi obbligatorio per tutti.</b> Le Case di Comunità del DM 77/2022 sono operative con personale sufficiente in meno del 3% dei casi (AGENAS, 2024): il pubblico non colma il gap nel breve termine. Il mercato esiste già — non è ancora organizzato.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DATO -->
+<section class="block" id="dato" style="background:var(--mist);">
+  <div class="wrap reveal data">
+    <div>
+      <div class="sec-eyebrow">L'asset</div>
+      <blockquote>Il dato è l'asset. <span>La cura del paziente è il modo in cui lo costruiamo.</span></blockquote>
+      <p style="margin-top:1.3rem;">Ogni percorso coordinato genera Real World Data strutturati, contestualizzati e con consenso esplicito — oggi inesistenti in forma accessibile nel sistema sanitario italiano.</p>
+    </div>
+    <div class="panel">
+      <div class="row"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9l3.5 3.5L14 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Industria farmaceutica — ricerca sull'aderenza e patient support</div>
+      <div class="row"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9l3.5 3.5L14 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Fondi sanitari — ottimizzazione dei percorsi clinici</div>
+      <div class="row"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9l3.5 3.5L14 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Sistemi regionali — programmi di supporto al paziente</div>
+    </div>
+  </div>
+</section>
+
+<!-- AZIENDE / WELFARE -->
+<section class="block" id="aziende" style="background:var(--mist);">
+  <div class="wrap reveal">
+    <div class="sec-head">
+      <div class="sec-eyebrow">Per le aziende</div>
+      <h2>Filum come benefit di welfare aziendale</h2>
+      <p>Le aziende offrono ai dipendenti — e ai loro familiari — il coordinamento delle cure croniche come benefit di welfare. Meno percorsi interrotti, più aderenza, persone più serene al lavoro.</p>
+    </div>
+    <div class="pillars">
+      <div class="card">
+        <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="8.5" cy="8" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M3 19c.8-3 2.8-4.5 5.5-4.5S13.2 16 14 19" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M15.5 6.2A2.8 2.8 0 0 1 15.5 11.6M17 19c-.3-1.6-1-2.9-2-3.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div>
+        <h3>Per il dipendente</h3>
+        <p>Un percorso di cura coordinato per sé e per i familiari con patologie croniche, in un'unica interfaccia. Meno tempo perso tra strutture, meno complicanze.</p>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 20V4M4 20h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M8 16v-3M12 16V8M16 16v-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div>
+        <h3>Per l'azienda</h3>
+        <p>Riduzione di assenze e presenteismo legati alle cronicità, dentro i piani di welfare aziendale e con i relativi vantaggi fiscali.</p>
+      </div>
+      <div class="card">
+        <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M13 3 5 13h5l-1 8 8-10h-5l1-8Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></div>
+        <h3>Attivazione semplice</h3>
+        <p>Si integra nel piano welfare esistente: attivazione per gruppi di dipendenti e reportistica aggregata e anonima per l'HR.</p>
+      </div>
+    </div>
+    <div style="margin-top:2rem;">
+      <a href="#profilo" class="btn btn-primary">Richiedi Filum per la tua azienda</a>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final reveal" id="final">
+  <div class="wrap">
+    <h2>Vuoi capire come Filum coordina un percorso di cura?</h2>
+    <p>Ti mostriamo l'ecosistema, l'architettura di identità sovrana e come nasce il profilo longitudinale del paziente.</p>
+    <a href="#" class="btn btn-primary">Scopri di più</a>
+  </div>
+</section>
+
+<!-- CREA PROFILO -->
+<section class="block" id="profilo" style="background:var(--mist);">
+  <div class="wrap reveal signup">
+    <div>
+      <div class="sec-eyebrow">Crea profilo</div>
+      <h2 style="font-size:clamp(1.7rem,3.4vw,2.4rem);max-width:16ch;">Crea il tuo profilo Filum</h2>
+      <p style="color:var(--ink-2);margin-top:1rem;max-width:44ch;">Un unico profilo per te o per chi assisti. Tu possiedi e controlli i tuoi dati: consenso granulare, revocabile in ogni momento.</p>
+      <ul class="perks">
+        <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10.5 8 14.5 16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Identità sanitaria sovrana (W3C)</li>
+        <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10.5 8 14.5 16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Profilo longitudinale continuo</li>
+        <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10.5 8 14.5 16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Alert AI sul percorso di cura</li>
+      </ul>
+    </div>
+
+    <form class="form-card" onsubmit="return false;">
+      <div class="field">
+        <label>Nome e cognome</label>
+        <input type="text" placeholder="Es. Mario Rossi">
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" placeholder="nome@email.it">
+      </div>
+      <div class="field">
+        <label>Tipo di profilo</label>
+        <select>
+          <option>Paziente</option>
+          <option>Caregiver / familiare</option>
+          <option>Medico</option>
+          <option>Azienda (welfare)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Patologia principale (facoltativo)</label>
+        <select>
+          <option>Preferisco non indicare</option>
+          <option>Diabete</option>
+          <option>BPCO</option>
+          <option>Dislipidemia</option>
+          <option>Ipertensione</option>
+          <option>Altro</option>
+        </select>
+      </div>
+      <label class="consent"><input type="checkbox"> Acconsento al trattamento dei miei dati secondo l'informativa sulla privacy.</label>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;">Crea profilo</button>
+      <p class="form-foot">Hai già un profilo? <a href="#">Accedi</a></p>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap foot">
+    <span class="brand" style="display:flex;align-items:center;gap:.5rem;">
+      <svg width="20" height="20" viewBox="0 0 26 26" fill="none"><path d="M4 20c4-2 4-12 9-14 4-1.6 8 1 8 5s-4 6.5-8 5-6.5-4-5-8" stroke="#10b3a3" stroke-width="2.4" stroke-linecap="round"/><circle cx="4" cy="20" r="2.3" fill="#0c2b31"/><circle cx="21" cy="11" r="2.3" fill="#10b3a3"/></svg>
+      Filum
+    </span>
+    <span>Ecosistema digitale di coordinamento delle cure · Puglia</span>
+    <span>© <span id="yr">2026</span> Filum</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent=new Date().getFullYear();
+  // scroll reveal
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
